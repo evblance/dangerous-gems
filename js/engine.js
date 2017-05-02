@@ -26,7 +26,7 @@ var Engine = (function(global) {
         lastTime;
 
     canvas.width = 505;
-    canvas.height = 606;
+    canvas.height = 707;
     doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -81,6 +81,10 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         // checkCollisions();
+        // if the player has touched the top of the play area, increase the difficulty and play the next difficulty
+        // if the player has died (ie touched by a gem, reset the game to level 1)
+          // TODO: collision detection will have to take into account an area around the player
+          // ie. if the y-values of the gem and player are identical and their x-values are within half of a TILE_WIDTH, a collision has occured.
     }
 
     /* This is called by the update function and loops through all of the
@@ -91,8 +95,8 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
+        allGems.forEach(function(gem) {
+            gem.update(dt);
         });
         player.update();
     }
@@ -109,10 +113,11 @@ var Engine = (function(global) {
          */
         var rowImages = [
                 'images/grass-block.png',   // Top row is grass
-                'images/stone-block.png',   // Row 1 of 4 of stone
-                'images/stone-block.png',   // Row 2 of 4 of stone
-                'images/stone-block.png',   // Row 3 of 4 of stone
-                'images/stone-block.png',   // Row 4 of 4 of stone
+                'images/stone-block.png',   // Row 1 of 5 of stone
+                'images/stone-block.png',   // Row 2 of 5 of stone
+                'images/stone-block.png',   // Row 3 of 5 of stone
+                'images/stone-block.png',   // Row 4 of 5 of stone
+                'images/stone-block.png',   // Row 5 of 5 of stone
                 'images/grass-block.png'    // Bottom row is grass
             ],
             numRows = 7,
@@ -144,11 +149,12 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
+        theGame.render();
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
+        allGems.forEach(function(gem) {
+            gem.render();
         });
 
         player.render();
@@ -159,7 +165,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -170,7 +176,10 @@ var Engine = (function(global) {
         'images/stone-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-princess-girl.png'
+        'images/char-princess-girl.png',
+        'images/gem-blue.png',
+        'images/gem-green.png',
+        'images/gem-orange.png'
     ]);
     Resources.onReady(init);
 

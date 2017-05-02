@@ -6,8 +6,7 @@ In this Frogger-style arcade game clone, you (the princess in distress) must cro
 
 To run the game, simply:
 
-1. Start your favourite browser
-2. Make sure that JavaScript is enabled
+1. Download/clone this repository
 3. Open game.html
 
 ## How-to Play
@@ -18,7 +17,6 @@ Use the directional keys to move up, down, left and right.
 
 ### Gameplay
 
-The goal of the game is to cross from the bottom row of grass to the top row without being hit by any gems. Each time the player succeeds the game's difficulty will increase. If you are hit by a gem your player dies and the difficulty resets. How many times will you succeed?
 
 ## License
 
