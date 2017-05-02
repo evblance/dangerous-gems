@@ -69,6 +69,24 @@ var Engine = (function(global) {
         main();
     }
 
+    /* This function is called by update and checks to see if any collision
+     * criteria are met
+     */
+    function checkCollisions() {
+
+      // This checks whether the player has been hit by a gem and resets
+      // the game if so
+      allGems.forEach(function(gem) {
+        if (gem.y === player.y) {
+          if (Math.abs(player.x - gem.x) <= TILE_WIDTH / 2) {
+            player.setStartPos();
+            theGame.reset();
+            allGems = instantiateGems(theGame.difficulty);
+          }
+        }
+      });
+    }
+
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
      * you implement your collision detection (when two entities occupy the
@@ -80,7 +98,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
         // if the player has touched the top of the play area, increase the difficulty and play the next difficulty
         // if the player has died (ie touched by a gem, reset the game to level 1)
           // TODO: collision detection will have to take into account an area around the player

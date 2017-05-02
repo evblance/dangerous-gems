@@ -182,12 +182,16 @@ function instantiateGems(difficulty) {
 
 // Game object that tracks difficulty
 var Game = function() {
-  this.difficulty = 2;
+  this.difficulty = 1;
 }
 
 Game.prototype.render = function() {
   var difficultyText = 'Level: ' + this.difficulty;
   document.getElementById('score').innerHTML = difficultyText;
+}
+
+Game.prototype.reset = function() {
+  this.difficulty = 1;
 }
 
 
@@ -300,9 +304,11 @@ Player.prototype.handleInput = function(keyString) {
     case 'up':
       // NOTE: This should probably be a part of collision detection algorithm instead,
       //        so that the game difficulty is not being handled by a Player method.
+      // This checks if the player has succeeded in reaching the next crossing (level)
       if (this.y - TILE_HEIGHT < 0) {
         player.setStartPos();
         theGame.difficulty += 1;
+        allGems = instantiateGems(theGame.difficulty);
         break;
       } else {
         this.y -= TILE_HEIGHT;
@@ -328,6 +334,17 @@ Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+// This listens for key presses and sends the keys to your
+// Player.handleInput() method. You don't need to modify this.
+document.addEventListener('keyup', function(e) {
+  var allowedKeys = {
+    37: 'left',
+    38: 'up',
+    39: 'right',
+    40: 'down'
+  };
+  player.handleInput(allowedKeys[e.keyCode]);
+});
 
 
 // Now instantiate your objects.
@@ -337,17 +354,3 @@ var theGame = new Game();
 var allGems = instantiateGems(theGame.difficulty);
 var player = new Player();
 player.setStartPos();
-
-
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
-    player.handleInput(allowedKeys[e.keyCode]);
-});
