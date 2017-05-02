@@ -1,23 +1,3 @@
-/*
-  Enemies will be 3 differently coloured gems where:
-    1. Blue has the slowest speed range
-    2. Green has an intermediate speed range
-    3. Yellow has the highest speed range
-
-  - If the player has won the game should reset but also increase in difficulty
-    by presenting a higher proportion of randomly higher colour gems (green, yellow)
-
-  - If the player loses the game the should rest but return the difficulty to the
-    lowest level.
-
-  - A counter keeps track of how many consecutive times the player has won the game
-
-
-  - Speed is pixels/time from x = 0 to x = canvas_width
-    > Blue is 20 - 40 pixels/sec
-    > Green is 50 - 90 pixels/sec
-    > Orange is 100 - 120 pixels/sec
-*/
 
 /* CONSTANTS */
 // game area
@@ -34,7 +14,7 @@ const GREEN_MAX_SPD = 180;
 const ORANGE_MIN_SPD = 200;
 const ORANGE_MAX_SPD = 380;
 
-// gem roll probabilities [lower, for green (med) and orange (hard) - (remainder are blue)]
+// lower gem roll 'probabilities' [for green (med) and orange (hard) - (remainder are blue)]
 const LVL1_HARD_FLOOR = 95;
 const LVL1_MED_FLOOR = 70;
 const LVL2_HARD_FLOOR = 92;
@@ -201,14 +181,17 @@ var Gem = function(colour) {
     this.colour = colour
 };
 
+// method that allows a gem to set a random entry height
+Gem.prototype.setStartY = function() {
+  this.y = TILE_HEIGHT * Math.floor(Math.random() * (GAME_HEIGHT-3) + 1);
+}
+
 // method that allows a gem to set a random vertical starting position for itself and horizontal
 // distance from the play canvas (trick to stagger gem 'release' time)
 Gem.prototype.setStartPos = function() {
 
   this.x = Math.floor(Math.random() * 10*TILE_WIDTH) - 5*TILE_WIDTH;
-  this.y = TILE_HEIGHT * Math.floor(Math.random() * ((GAME_HEIGHT-2) + 1));
-  console.log('random startX = ', this.x);
-  console.log('random startY = ', this.y);
+  this.setStartY();
 }
 
 // method that allows a gem to set its correct sprite [avoids resorting to prototypal inheritance
@@ -258,7 +241,7 @@ Gem.prototype.update = function(dt) {
     // check if the gem has reached the edge of play area, if so then respawn it
     if (this.x >= GAME_WIDTH*TILE_WIDTH) {
       this.x = Math.floor(Math.random() * -7*TILE_WIDTH) - TILE_WIDTH;
-      this.y = TILE_HEIGHT * Math.floor(Math.random() * ((GAME_HEIGHT-3) + 2));
+      this.setStartY();
       this.setSpeed();
     }
 
