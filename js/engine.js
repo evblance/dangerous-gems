@@ -74,15 +74,13 @@ var Engine = (function(global) {
      */
     function checkCollisions() {
 
-      // This checks whether the player has been hit by a gem and resets
-      // the game if so
+      // This checks whether the player has been hit by a gem and resets if applicable
       allGems.forEach(function(gem) {
-        if (gem.y === player.y) {
-          if (Math.abs(player.x - gem.x) <= TILE_WIDTH / 2) {
-            player.setStartPos();
-            theGame.reset();
-            allGems = instantiateGems(theGame.difficulty);
-          }
+        if (gem.y === player.y && Math.abs(player.x - gem.x) <= (TILE_WIDTH / 2)) {
+          player.setStartPos();
+          theGame.reset();
+          allGems = instantiateGems(theGame.difficulty);
+          return;
         }
       });
     }

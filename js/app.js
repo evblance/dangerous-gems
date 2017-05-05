@@ -1,43 +1,57 @@
+/*  IDEAS FOR ADDITIONAL GAMEPLAY:
+ *    - Add a randomly spawned key, which the player must collect before being allowed to
+ *      advance to the next level
+ *    - Add time constraints to the level progression
+ *    - Allow gems to change their colour and hence speed after a certain amount of time has elapsed
+ *    - For different gameplay, make gems unable to go through each other but rather slow down to the
+ *      speed of the preceding gem if they are about to collide with it
+ */
+
 
 /* CONSTANTS */
-// game area
-const TILE_WIDTH = 101;
-const TILE_HEIGHT = 83;
-const GAME_WIDTH = 5;
-const GAME_HEIGHT = 7;
+// game area constants
+var TILE_WIDTH = 101;
+var TILE_HEIGHT = 83;
+var GAME_WIDTH = 5;
+var GAME_HEIGHT = 7;
 
-// gem speed values
-const BLUE_MIN_SPD = 40;
-const BLUE_MAX_SPD = 80;
-const GREEN_MIN_SPD = 100;
-const GREEN_MAX_SPD = 180;
-const ORANGE_MIN_SPD = 200;
-const ORANGE_MAX_SPD = 380;
+// gem speed value constants
+var BLUE_MIN_SPD = 40;
+var BLUE_MAX_SPD = 80;
+var GREEN_MIN_SPD = 100;
+var GREEN_MAX_SPD = 180;
+var ORANGE_MIN_SPD = 200;
+var ORANGE_MAX_SPD = 380;
 
-// lower gem roll 'probabilities' [for green (med) and orange (hard) - (remainder are blue)]
-const LVL1_HARD_FLOOR = 95;
-const LVL1_MED_FLOOR = 70;
-const LVL2_HARD_FLOOR = 92;
-const LVL2_MED_FLOOR = 60;
-const LVL3_HARD_FLOOR = 88;
-const LVL3_MED_FLOOR = 50;
-const LVL4_HARD_FLOOR = 82;
-const LVL4_MED_FLOOR = 40;
-const LVL5_HARD_FLOOR = 76;
-const LVL5_MED_FLOOR = 30;
-const LVL6_HARD_FLOOR = 70;
-const LVL6_MED_FLOOR = 25;
-const LVL7_HARD_FLOOR = 66;
-const LVL7_MED_FLOOR = 20;
-const LVL8_HARD_FLOOR = 60;
-const LVL8_MED_FLOOR = 15;
-const LVL9_HARD_FLOOR = 50;
-const LVL9_MED_FLOOR = 10;
-const LVL10_HARD_FLOOR = 35;
-const LVL10_MED_FLOOR = 5;
+// Constants used to control the random gem 'probability' rolls according to difficulty level
+// Used in generateGem function
+// { blue gem } | MED_FLOOR | { green gem } | HARD_FLOOR | { orange gem }
+var LVL1_HARD_FLOOR = 95;
+var LVL1_MED_FLOOR = 70;
+var LVL2_HARD_FLOOR = 92;
+var LVL2_MED_FLOOR = 60;
+var LVL3_HARD_FLOOR = 88;
+var LVL3_MED_FLOOR = 50;
+var LVL4_HARD_FLOOR = 82;
+var LVL4_MED_FLOOR = 40;
+var LVL5_HARD_FLOOR = 76;
+var LVL5_MED_FLOOR = 30;
+var LVL6_HARD_FLOOR = 70;
+var LVL6_MED_FLOOR = 25;
+var LVL7_HARD_FLOOR = 66;
+var LVL7_MED_FLOOR = 20;
+var LVL8_HARD_FLOOR = 60;
+var LVL8_MED_FLOOR = 15;
+var LVL9_HARD_FLOOR = 50;
+var LVL9_MED_FLOOR = 10;
+var LVL10_HARD_FLOOR = 35;
+var LVL10_MED_FLOOR = 5;
 
-
-// function that generates a gem based on some probability constants
+/**
+ * Function that generates gems according to the game difficulty level
+ * @constructor
+ * @param {integer} difficulty - The difficulty level of the game
+ */
 function generateGem(difficulty) {
 
   var roll = Math.floor(Math.random() * 100);
@@ -147,7 +161,11 @@ function generateGem(difficulty) {
   return theGem;
 }
 
-// function that instantiates the correct number of gems based on the difficulty/level
+/**
+ * Function that instatiates the correct number of gems according to difficulty
+ * @constructor
+ * @param {integer} difficulty - The difficulty level of the game
+ */
 function instantiateGems(difficulty) {
 
   var gemArr = [];
@@ -160,42 +178,68 @@ function instantiateGems(difficulty) {
   return gemArr;
 }
 
-// Game object that tracks difficulty
+/**
+ * Object representing the Game
+ * @constructor
+ */
 var Game = function() {
   this.difficulty = 1;
 }
 
+/**
+ * Displays some game information to the screen
+ * @constructor
+ */
 Game.prototype.render = function() {
   var difficultyText = 'Level: ' + this.difficulty;
   document.getElementById('score').innerHTML = difficultyText;
 }
 
+/**
+* Performs resetting operations on the object when the game is over
+* @constructor
+*/
 Game.prototype.reset = function() {
   this.difficulty = 1;
 }
 
 
-// Gems (enemies) our player must avoid
+/**
+* Represents Gems (enemy vehicles) our player must avoid
+* @constructor
+* @param {string} colour - The colour of the gem
+*/
 var Gem = function(colour) {
 
     this.colour = colour
 };
 
-// method that allows a gem to set a random entry height
+/**
+* Method that allows a gem to set a random entry height into the game
+* @constructor
+*/
 Gem.prototype.setStartY = function() {
+
   this.y = TILE_HEIGHT * Math.floor(Math.random() * (GAME_HEIGHT-3) + 1);
 }
 
-// method that allows a gem to set a random vertical starting position for itself and horizontal
-// distance from the play canvas (trick to stagger gem 'release' time)
+/**
+* Method that allows a gem to set a random vertical starting position for itself
+* and horizontal distance from the play canvas (trick to stagger gems)
+* @constructor
+*/
 Gem.prototype.setStartPos = function() {
 
   this.x = Math.floor(Math.random() * 10*TILE_WIDTH) - 5*TILE_WIDTH;
   this.setStartY();
 }
 
-// method that allows a gem to set its correct sprite [avoids resorting to prototypal inheritance
-// in creating three different Gem sub-classes for just one property (colour)]
+/**
+* Method that allows a gem to set its correct sprite
+* [avoids resorting to prototypal inheritance in creating three different Gem
+* sub-classes for just one property (colour)]
+* @constructor
+*/
 Gem.prototype.setSprite = function() {
 
   switch (this.colour) {
@@ -213,7 +257,10 @@ Gem.prototype.setSprite = function() {
   }
 }
 
-// method that allows a gem to set its speed based on its colour (and some randomness)
+/**
+* Method that allows a gem to set its speed based on its colour (and some randomness)
+* @constructor
+*/
 Gem.prototype.setSpeed = function() {
 
   switch (this.colour) {
@@ -231,8 +278,11 @@ Gem.prototype.setSpeed = function() {
   }
 }
 
-// Update the dangerous gem's position, required method for game
-// Parameter: dt, a time delta between ticks
+/**
+* Method that updates the dangerous gem's position
+* @constructor
+* @param {number} dt - Time delta between ticks of the game engine
+*/
 Gem.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
@@ -249,26 +299,38 @@ Gem.prototype.update = function(dt) {
     return;
 };
 
-// Draw the enemy on the screen, required method for game
+/**
+* Method that draws the dangerous gems on the screen
+* @constructor
+*/
 Gem.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite),this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
 
+/**
+ * Class that represents the player character in the game
+ * @constructor
+ */
 var Player = function() {
   this.sprite = 'images/char-princess-girl.png';
 };
 
+/**
+* Method that is used to set/reset the player character's starting position in the game
+* @constructor
+*/
 Player.prototype.setStartPos = function() {
   this.x = 2 * TILE_WIDTH;
   this.y = 6 * TILE_HEIGHT;
 }
 
+/**
+* Method that handles human player input while checking for valid movement
+* @constructor
+* @param {string} keyString - The string representing the key pressed by the gamer
+*/
 Player.prototype.handleInput = function(keyString) {
-  // need to check whether the player can validly move as directed
   switch (keyString) {
     case 'left':
       if (this.x - TILE_WIDTH < 0) {
@@ -285,9 +347,7 @@ Player.prototype.handleInput = function(keyString) {
         break;
       }
     case 'up':
-      // NOTE: This should probably be a part of collision detection algorithm instead,
-      //        so that the game difficulty is not being handled by a Player method.
-      // This checks if the player has succeeded in reaching the next crossing (level)
+      // check if the player has succeeded in reaching the next game level
       if (this.y - TILE_HEIGHT < 0) {
         player.setStartPos();
         theGame.difficulty += 1;
@@ -309,10 +369,18 @@ Player.prototype.handleInput = function(keyString) {
   }
 };
 
+/**
+* Method that could be removed if it wasn't required.
+* @constructor
+*/
 Player.prototype.update = function() {
   return;
 };
 
+/**
+* Method that renders the player character on the screen
+* @constructor
+*/
 Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
@@ -329,10 +397,7 @@ document.addEventListener('keyup', function(e) {
   player.handleInput(allowedKeys[e.keyCode]);
 });
 
-
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+// Instantiation of game objects and assignment to variables
 var theGame = new Game();
 var allGems = instantiateGems(theGame.difficulty);
 var player = new Player();
