@@ -74,7 +74,10 @@ var Engine = (function(global) {
      */
     function checkCollisions() {
 
-      // This checks whether the player has been hit by a gem and resets if applicable
+      /* This checks whether the player has been hit by a gem and resets if applicable.
+       * If the y-values of the gem and player are identical and their x-values are within half of a TILE_WIDTH
+       * rule that a collision has occured.
+       */
       allGems.forEach(function(gem) {
         if (gem.y === player.y && Math.abs(player.x - gem.x) <= (TILE_WIDTH / 2)) {
           player.setStartPos();
@@ -97,10 +100,6 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
-        // if the player has touched the top of the play area, increase the difficulty and play the next difficulty
-        // if the player has died (ie touched by a gem, reset the game to level 1)
-          // TODO: collision detection will have to take into account an area around the player
-          // ie. if the y-values of the gem and player are identical and their x-values are within half of a TILE_WIDTH, a collision has occured.
     }
 
     /* This is called by the update function and loops through all of the
