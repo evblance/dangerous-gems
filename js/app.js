@@ -174,7 +174,7 @@ function instantiateGems(difficulty) {
   for (var i = 0; i < numGems; i++) {
       gemArr.push(generateGem(difficulty));
   }
-  console.log(gemArr.length);
+
   return gemArr;
 }
 
@@ -183,25 +183,28 @@ function instantiateGems(difficulty) {
  * @constructor
  */
 var Game = function() {
+
   this.difficulty = 1;
-}
+};
 
 /**
  * Displays some game information to the screen
  * @constructor
  */
 Game.prototype.render = function() {
+
   var difficultyText = 'Level: ' + this.difficulty;
   document.getElementById('score').innerHTML = difficultyText;
-}
+};
 
 /**
 * Performs resetting operations on the object when the game is over
 * @constructor
 */
 Game.prototype.reset = function() {
+
   this.difficulty = 1;
-}
+};
 
 
 /**
@@ -211,7 +214,7 @@ Game.prototype.reset = function() {
 */
 var Gem = function(colour) {
 
-    this.colour = colour
+    this.colour = colour;
 };
 
 /**
@@ -221,7 +224,7 @@ var Gem = function(colour) {
 Gem.prototype.setStartY = function() {
 
   this.y = TILE_HEIGHT * Math.floor(Math.random() * (GAME_HEIGHT-3) + 1);
-}
+};
 
 /**
 * Method that allows a gem to set a random vertical starting position for itself
@@ -232,7 +235,7 @@ Gem.prototype.setStartPos = function() {
 
   this.x = Math.floor(Math.random() * 10*TILE_WIDTH) - 5*TILE_WIDTH;
   this.setStartY();
-}
+};
 
 /**
 * Method that allows a gem to set its correct sprite
@@ -255,7 +258,7 @@ Gem.prototype.setSprite = function() {
     default:
       break;
   }
-}
+};
 
 /**
 * Method that allows a gem to set its speed based on its colour (and some randomness)
@@ -276,7 +279,7 @@ Gem.prototype.setSpeed = function() {
     default:
       break;
   }
-}
+};
 
 /**
 * Method that updates the dangerous gem's position
@@ -304,6 +307,7 @@ Gem.prototype.update = function(dt) {
 * @constructor
 */
 Gem.prototype.render = function() {
+
     ctx.drawImage(Resources.get(this.sprite),this.x, this.y);
 };
 
@@ -313,6 +317,7 @@ Gem.prototype.render = function() {
  * @constructor
  */
 var Player = function() {
+
   this.sprite = 'images/char-princess-girl.png';
 };
 
@@ -321,9 +326,10 @@ var Player = function() {
 * @constructor
 */
 Player.prototype.setStartPos = function() {
+
   this.x = 2 * TILE_WIDTH;
   this.y = 6 * TILE_HEIGHT;
-}
+};
 
 /**
 * Method that handles human player input while checking for valid movement
@@ -374,6 +380,7 @@ Player.prototype.handleInput = function(keyString) {
 * @constructor
 */
 Player.prototype.update = function() {
+
   return;
 };
 
@@ -382,12 +389,14 @@ Player.prototype.update = function() {
 * @constructor
 */
 Player.prototype.render = function() {
+
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
+
   var allowedKeys = {
     37: 'left',
     38: 'up',

@@ -1,12 +1,12 @@
 body {
-    text-align: center;
-    background: #555;
-    font-family: 'Press Start 2P';
+  background: #555;
+  font-family: "Press Start 2P";
+  text-align: center;
 }
 
 .title {
-  font-size: 30px;
   color: whitesmoke;
+  font-size: 30px;
 }
 
 #score {
